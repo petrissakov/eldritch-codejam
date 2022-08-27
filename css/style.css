@@ -42,13 +42,9 @@ body {
     
 }
 
-.active{
-    border: 1px solid red;
-    box-shadow: 1px 1px 2px black, 0 0 1em red, 0 0 0.2em red;
-}
 
 .ancients_c{
-    margin-top: 8em;
+    margin-top: 4em;
     display: flex;
     flex-direction: row;
     gap: 5em;
@@ -67,13 +63,15 @@ body {
 
 .ancient_card:hover{
     box-shadow: 1px 1px 2px black, 0 0 1em red, 0 0 0.2em red;
+    transform: scale(2); /* Увеличиваем масштаб */
+    transition-duration: 2s;
 }
 
 .level_list{
     text-align: center;
     font-size: 3em;
     line-height: 2em;
-    margin-top: 6em;
+    margin-top: 2em;
     list-style: none;
     text-decoration: none;
     cursor: pointer;
@@ -85,8 +83,14 @@ body {
     
 }
 
+.game_c{
+    display: flex;
+    flex-direction: column;
+}
+
 #start_game_btn{
     text-align: center;
+    grid-column: 2;
     width: 3000px;
     font-size: 5em;
     margin-top: 3em;
@@ -96,4 +100,74 @@ body {
 #start_game_btn:hover{
     text-shadow:1px 1px 2px black, 0 0 1em red, 0 0 0.2em red;
     box-shadow: 1px 1px 2px black, 0 0 1em red, 0 0 0.2em red;
+}
+
+.stage{
+    grid-column: 1;
+   text-align: center;
+    font-size: 3em;
+    line-height: 2em;
+    /* margin-top: 1.5em; */
+}
+
+.colors_container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5em;
+
+}
+
+.dot{
+    font-size: 1em;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.dot.green{
+    background-color: green;
+}
+
+.dot.blue{
+    background-color: blue;
+}
+
+.dot.brown{
+    background-color: brown;
+}
+
+.deck_c{
+    margin-top: 1em;
+    width: 13em;
+    height: 19em;
+    background-image: url('../assets/mythicCardBackground.png');
+    cursor: pointer;
+}
+
+.card_c{
+    position: absolute;
+    top: 50%;
+    right: 50%;
+    width: 27em;
+    height: 40em;
+    transform: translate(200%, -5%);
+}
+
+.card_c:hover{
+    transform: scale(1.5);
+}
+
+.deck_c:hover{
+    box-shadow: 1px 1px 2px black, 0 0 1em red, 0 0 0.2em red;
+}
+
+.active{
+    border: 1px solid red;
+    box-shadow: 1px 1px 2px black, 0 0 1em red, 0 0 0.2em red;
+}
+
+.hidden{
+    display: none;
 }
