@@ -92,7 +92,7 @@ showStart();
 function showStart(event){
     button.classList.toggle('hidden')
     console.log(game_settings);
-    button.onclick = startGame;
+    button.onclick = showDeck;
 
 }
 
@@ -171,7 +171,7 @@ function shuffleDeck(){
 
 
 
-function startGame(){
+function showDeck(){
 
     button.classList.add('hidden');
     deck = shuffleDeck();
@@ -204,14 +204,35 @@ function startGame(){
     deck_container.onclick = showCard;
 }
 
-function showCard(){
+function refreshDeck(){
+    const stages = document.querySelectorAll('.stage');
+    console.log(stages);
+   for(let i=0;i<stages.length;i++){
+    
+    for(let color of ['green', 'blue', 'brown']){
+        stages[i].querySelector(`.${color}`).textContent = deck[i].filter((value)=>value.color==color).length;
+    }
+   }
 
-    if(deck[0].length==0) deck.shift(); // если карты на стадии закончились удаляем пустой список из массива
-    let card = randomArr(deck[0], 1)[0];
+}
+
+function showCard(){
+    let card;
+    for(let stage=0; stage<deck.length; stage++){
+        if(deck[stage].length==0) continue; // если карты на стадии закончились пропускаем stage
+        console.log('stage' + stage);
+        card = randomArr(deck[stage], 1)[0];
+        break;
+        
+    }
     console.log(card);
+    if(!card){
+        card_container.classList.add('hidden'); // скрываем карту
+        return
+    }
     card_container.style.backgroundImage = `url('${card.cardFace}')`;
     card_container.classList.remove('hidden');
-
+    refreshDeck();
 }
 
 showAncient();
