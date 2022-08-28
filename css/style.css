@@ -20,7 +20,7 @@
 
 body {
     position: relative;
-    overflow-x: hidden;
+    overflow-x: auto;
   }
   
 
@@ -124,8 +124,8 @@ body {
 
 .dot{
     font-size: 1em;
-    width: 60px;
-    height: 60px;
+    width: 2.5em;
+    height: 2.5em;
     border-radius: 50%;
     cursor: pointer;
 }
@@ -156,7 +156,8 @@ body {
     right: 50%;
     width: 27em;
     height: 40em;
-    transform: translate(200%, -5%);
+    transform: translate(180%, 5%);
+    background-size: cover;
 }
 
 /* .card_c:hover{
@@ -175,3 +176,29 @@ body {
 .hidden{
     display: none;
 }
+
+@media (max-width: 1000px) {
+    :root {
+      --default-font-size: 8px;
+    }
+  }
+
+
+@media (max-width: 800px) {
+    :root {
+      --default-font-size: 6px;
+    }
+  }
+
+  
+@media (max-width: 700px) {
+    :root {
+      --default-font-size: 5px;
+    }
+  }
+
+  @media (max-width: 500px) {
+    :root {
+      --default-font-size: 4px;
+    }
+  }
