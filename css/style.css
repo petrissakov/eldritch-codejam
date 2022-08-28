@@ -110,6 +110,10 @@ body {
     /* margin-top: 1.5em; */
 }
 
+.finish{
+    text-shadow:1px 1px 2px black, 0 0 1em red, 0 0 0.2em red;
+}
+
 .colors_container{
     display: flex;
     justify-content: center;
@@ -155,9 +159,9 @@ body {
     transform: translate(200%, -5%);
 }
 
-.card_c:hover{
+/* .card_c:hover{
     transform: scale(1.5);
-}
+} */
 
 .deck_c:hover{
     box-shadow: 1px 1px 2px black, 0 0 1em red, 0 0 0.2em red;

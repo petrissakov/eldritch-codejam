@@ -19,7 +19,7 @@ let game_settings = {
     stage: 0
 };
 
-let deck = []
+let deck = [];
 
 let stage_h = [
     'Первая Стадия',
@@ -46,13 +46,13 @@ function setAncient(event){
         document.querySelector(`#${game_settings.ancient.id}`).classList.toggle('active'); // снимаем на прежнем элементе выделение
         event.srcElement.classList.toggle('active');
         game_settings.ancient = ancientsData.filter((value)=>value.id==event.srcElement.id)[0]; // получаем объект ancient из массива
+        resetGame();
+
         showStart();
-        console.log(game_settings);
         return;
     } // если древний уже установлен - повторно список не выводим
     event.srcElement.classList.toggle('active');
     game_settings.ancient = ancientsData.filter((value)=>value.id==event.srcElement.id)[0];
-    console.log(game_settings);
     showdiff();
     
     
@@ -79,7 +79,7 @@ if(game_settings.levelID) {
     document.querySelector(`#${game_settings.levelID}`).classList.remove('active'); // снимаем на прежнем элементе выделение
     event.srcElement.classList.add('active');
     game_settings.levelID = event.srcElement.id;
-    console.log(game_settings);
+    resetGame();
     showStart();
     return;
 } // если сложность уже установлена повторно не выводим
@@ -90,7 +90,7 @@ showStart();
 
 
 function showStart(event){
-    button.classList.toggle('hidden')
+    button.classList.remove('hidden')
     console.log(game_settings);
     button.onclick = showDeck;
 
@@ -110,11 +110,12 @@ function randomArr(arr, len){ // фукнция возвращает рандо�
     return result;
 }
 
-function getCards(count, level, deck){
+function getCards(count, level, src_deck){
     let result = [];
-    let easy_cards = deck.filter((value)=>value['difficulty']=='easy');
-    let normal_cards = deck.filter((value)=>value['difficulty']=='normal');
-    let hard_cards = deck.filter((value)=>value['difficulty']=='hard');
+    let all_card = src_deck.slice();
+    let easy_cards = src_deck.filter((value)=>value['difficulty']=='easy');
+    let normal_cards = src_deck.filter((value)=>value['difficulty']=='normal');
+    let hard_cards = src_deck.filter((value)=>value['difficulty']=='hard');
 
     if(level=="veryeasy"){
         let delta = count - easy_cards.length;
@@ -125,7 +126,7 @@ function getCards(count, level, deck){
             let easy_normal = easy_cards.concat(normal_cards);
             result = randomArr(easy_normal, count);
        } else if(level=='normal'){
-            result = randomArr(deck, count);
+            result = randomArr(all_card, count);
        } else if(level=='hard'){
             let normal_hard = normal_cards.concat(hard_cards);
             result = randomArr(normal_hard, count);
@@ -176,6 +177,15 @@ function showDeck(){
     button.classList.add('hidden');
     deck = shuffleDeck();
     console.log(deck);
+    deck_container.classList.remove('hidden'); // выводим рубашку колоды
+    stages_container.classList.remove('hidden');
+    if(document.querySelector('.stage')) { // если раксладка карт по цветам уже была создана - только обновляем значения
+        console.log('раскладка уже есть')
+        
+        refreshDeck();
+        return;
+    }
+
     for(let i=0; i<deck.length; i++){
         let stage = document.createElement('div');
         stage.classList.add('stage');
@@ -188,11 +198,11 @@ function showDeck(){
         colors_container.classList.add('colors_container');
 
         for(let color of ['green', 'blue', 'brown']){
-            console.log(color);
             let dot = document.createElement('div');
             dot.classList.add('dot');
             dot.classList.add(color);
-            dot.textContent = deck[i].filter((value)=>value.color==color).length;
+            let value = deck[i].filter((value)=>value.color==color).length;
+            dot.textContent = (value == 0) ? '' : value;
             colors_container.append(dot);
         }
         
@@ -200,17 +210,18 @@ function showDeck(){
         stages_container.append(stage);
         stage.append(colors_container);
     }
-    deck_container.classList.toggle('hidden');
     deck_container.onclick = showCard;
 }
 
 function refreshDeck(){
     const stages = document.querySelectorAll('.stage');
-    console.log(stages);
    for(let i=0;i<stages.length;i++){
     
     for(let color of ['green', 'blue', 'brown']){
-        stages[i].querySelector(`.${color}`).textContent = deck[i].filter((value)=>value.color==color).length;
+        const dot  = stages[i].querySelector(`.${color}`);
+        let value = deck[i].filter((value)=>value.color==color).length;
+        dot.textContent = (value == 0) ? '' : value;
+
     }
    }
 
@@ -219,20 +230,38 @@ function refreshDeck(){
 function showCard(){
     let card;
     for(let stage=0; stage<deck.length; stage++){
-        if(deck[stage].length==0) continue; // если карты на стадии закончились пропускаем stage
+        if(deck[stage].length==0) {// если карты на стадии закончились пропускаем stage
+            document.querySelector(`#stage${stage+1}>.stage_text`).classList.add('finish');
+            continue;
+        } 
         console.log('stage' + stage);
+        card_container.classList.remove('hidden');
         card = randomArr(deck[stage], 1)[0];
         break;
         
     }
     console.log(card);
     if(!card){
+        card_container.style.backgroundImage = `none`
+        deck_container.classList.add('hidden');
         card_container.classList.add('hidden'); // скрываем карту
         return
     }
     card_container.style.backgroundImage = `url('${card.cardFace}')`;
     card_container.classList.remove('hidden');
     refreshDeck();
+}
+
+function resetGame(){
+    console.log('Reseting game...')
+    deck = [];
+    card_container.style.backgroundImage = `none`
+    stages_container.classList.add('hidden');
+    deck_container.classList.add('hidden');
+    card_container.classList.add('hidden'); // скрываем карту
+    document.querySelectorAll('.stage_text').forEach((item)=>item.classList.remove('finish'))
+
+    console.log(greenCards.length, blueCards.length, brownCards.length);
 }
 
 showAncient();
